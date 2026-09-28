@@ -1,0 +1,4 @@
+interface:
+  display_name: "OpenCloud 中文维护"
+  short_description: "维护 OpenCloud 中文词表、同步英文基线并验证扩展发行包"
+  default_prompt: "使用 $opencloud-zh-cn-maintenance 按目标 OpenCloud Web 版本维护中文译文，并说明已完成的验证。"

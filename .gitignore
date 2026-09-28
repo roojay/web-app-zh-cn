@@ -1,0 +1,8 @@
+node_modules/
+.__mf__temp/
+dist/
+release/
+.DS_Store
+*.tsbuildinfo
+.env
+.env.*

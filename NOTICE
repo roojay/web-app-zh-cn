@@ -1,0 +1,16 @@
+OpenCloud Web Simplified Chinese terminology extension
+
+The English message keys and part of the Chinese translations are derived from
+OpenCloud Web and its bundled applications, https://github.com/opencloud-eu/web,
+copyright OpenCloud GmbH, ownCloud GmbH and the respective contributors.
+The upstream project is distributed under the GNU Affero General Public License v3.
+
+This catalog was collected from an OpenCloud 8.0.1 deployment on 2026-09-25,
+then completed and revised for familiar Simplified Chinese file-sharing terminology.
+On 2026-09-28 the existing catalog was reorganized into a standalone extension.
+It is a community customization and is not an official OpenCloud translation release.
+
+The module is distributed under AGPL-3.0-only; see LICENSE. Third-party libraries
+retain their respective licenses. This module uses the OpenCloud Extension SDK
+and the host-provided web-pkg runtime. Module federation build output can also
+contain runtime helpers from dependencies; see their package license notices.

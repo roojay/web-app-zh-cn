@@ -1,0 +1,27 @@
+{
+  "name": "web-app-zh-cn",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check:types": "tsc --noEmit",
+    "check:translations": "node scripts/check.mjs",
+    "check": "npm run check:types && npm run check:translations",
+    "build": "npm run check && vite build && node scripts/check.mjs --dist",
+    "build:watch": "vite build --watch",
+    "package": "npm run build && node scripts/package-release.mjs"
+  },
+  "devDependencies": {
+    "@opencloud-eu/extension-sdk": "8.0.0",
+    "@opencloud-eu/web-pkg": "8.0.0",
+    "@types/node": "24.19.0",
+    "typescript": "5.9.3",
+    "vite": "8.0.0"
+  },
+  "description": "Community Simplified Chinese terminology and translations for OpenCloud Web.",
+  "license": "AGPL-3.0-only",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "packageManager": "npm@11.12.1"
+}
