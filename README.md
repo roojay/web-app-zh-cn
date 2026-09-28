@@ -3,11 +3,11 @@
 `web-app-zh-cn` 是一个社区维护的 OpenCloud Web 译文扩展，采用 OpenCloud 官方 Extension SDK 和 Web Application 接口。统一“团队空间”“回收站”“分享”等常用网盘术语，补齐并优化中文表达，不增加页面、菜单或业务接口。
 
 - 当前词表：1,640 个英文消息键，语言键为 OpenCloud 使用的 `zh`。
-- 词表来源：OpenCloud 8.0.1 部署中的 Web 与内置应用，采集于 2026-09-25。
+- 词表基线：OpenCloud 8.0.1 部署中的 Web 与内置应用，来源信息见 [NOTICE](./NOTICE)。
 - 构建基线：Extension SDK / web-pkg 8.0.0，Vite 8；依赖由 `package-lock.json` 固定。
-- 模块版本独立于服务端版本，首次独立发行版本为 `0.1.0`。
+- 当前模块版本：`0.1.0`，独立于服务端版本。
 
-原有译文和应用加载方式已在上述部署中使用；改名后的构建和安装 ZIP 可在本地验证。其他 Web 版本及新应用词条需另行核对，不承诺覆盖所有版本。服务端、Web、SDK 的版本号不是同一个兼容性标识。
+服务端、Web 与 SDK 的版本需分别核对。适配其他 Web 版本或应用时，应检查词条覆盖及译文加载顺序。
 
 ## 构建
 
@@ -27,7 +27,7 @@ npm run package
 
 ## 安装
 
-1. 下载发行包及 `SHA256SUMS`，用 `sha256sum`（Linux）或 `shasum -a 256`（macOS）比对对应文件哈希。
+1. 从 [Releases](https://github.com/roojay/web-app-zh-cn/releases) 下载发行包及 `SHA256SUMS`，或按上文自行构建。用 `sha256sum`（Linux）或 `shasum -a 256`（macOS）比对对应文件哈希。
 2. 将**安装 ZIP**解压到 OpenCloud 的应用目录下，形成：
 
    ```text
@@ -71,34 +71,38 @@ npm run package
    刷新浏览器并选择简体中文。部署默认语言属于服务端配置，不由此扩展强制改变用户偏好。
 5. 核对 `manifest.json` 及其 `entrypoint`、`translations.json` 均能访问，并检查团队空间、回收站、分享和权限提示的实际中文效果。纯译文扩展不会新增应用切换器菜单。
 
-保留 `customTranslations` 和译文应用两个加载入口，是为了延续已验证部署的行为：前者为运行时提供词表，后者在内置应用合并译文后提供应用译文。其他第三方应用可能再注册同名消息，升级时应复核覆盖顺序。
+本扩展通过 `customTranslations` 提供静态词表，并通过 Web Application 注册应用译文。其他应用可能注册同名消息，升级时应复核覆盖顺序及实际页面效果。
+
+## 升级与回退
+
+1. 保留当前安装包、Web 配置和 Compose 配置的可恢复副本。副本放在应用发现目录之外，避免重复加载。
+2. 将新安装包解压到空目录后替换扩展目录，更新 `customTranslations` URL 的版本参数，按安装步骤应用文件或容器配置变更。手动注册应用的部署需检查 `external_apps`、`apps.yaml` 或应用配置中的名称和路径；使用自动发现时避免重复注册。
+3. 核对清单、入口资源和词表，并检查受影响页面。需要回退时恢复上一版扩展及对应配置，按安装步骤重新应用并刷新浏览器验证。
 
 ## 维护译文
 
-只维护 [`l10n/translations.json`](./l10n/translations.json) 这一份中文词表。`src/index.ts` 直接导入 JSON；Vite 构建阶段将同一文件输出为静态 `translations.json`，供 `customTranslations` 读取，没有额外的 `copy-locale.mjs` 或第二份词表源文件。
+只维护 [`l10n/translations.json`](./l10n/translations.json) 这一份中文词表。`src/index.ts` 直接导入 JSON；Vite 构建阶段将同一文件输出为静态 `translations.json`，供 `customTranslations` 读取。
 
 [`l10n/source-keys.json`](./l10n/source-keys.json) 保存本版本英文消息键基线。升级 OpenCloud 时先对照新版本英文原文，更新基线和译文，再运行 `npm run check`。保留消息键、占位符名称、重复次数和空格，保持 HTML 标记及其语义。
 
-优先使用国内网盘常见表达，如“团队空间”“回收站”“个人空间”。完整术语与语义边界统一维护在 [中文用语](./.agents/skills/opencloud-zh-cn-maintenance/references/terminology.md)，不要机械替换“存储空间”或空白字符等不同概念。
+优先使用国内网盘常见表达，如“团队空间”“回收站”“个人空间”。完整术语与语义边界统一维护在仓库的 [中文用语](https://github.com/roojay/web-app-zh-cn/blob/main/.agents/skills/opencloud-zh-cn-maintenance/references/terminology.md)，不要机械替换“存储空间”或空白字符等不同概念。
 
 ### Agent 维护入口
 
-项目内附带 [opencloud-zh-cn-maintenance](./.agents/skills/opencloud-zh-cn-maintenance/SKILL.md) skill，覆盖日常改译、上游词条同步、构建发行和译文未生效排查。它复用现有脚本，无需安装全局 skill；在本仓库中工作的 Codex 可从 `.agents/skills/` 发现它，其他 agent 可直接读取 `SKILL.md` 并按需读取参考资料。
+Git 仓库内提供 [opencloud-zh-cn-maintenance](https://github.com/roojay/web-app-zh-cn/blob/main/.agents/skills/opencloud-zh-cn-maintenance/SKILL.md) skill，覆盖日常改译、上游词条同步、构建发行和译文未生效排查。它复用现有脚本，无需安装全局 skill；克隆仓库后，Codex 可从 `.agents/skills/` 发现它，其他 agent 可直接读取 `SKILL.md` 并按需读取参考资料。
 
 示例：`使用 $opencloud-zh-cn-maintenance 修正分享相关中文，保留英文键和占位符并完成校验。`
 
 适配新版时提供目标 OpenCloud Web / 应用版本或可复核的词表来源；服务端版本不能直接当作 Web 或 SDK 版本。
 
-## 独立发布
+## 发布
 
-整个目录可作为 GitHub 仓库根目录，名称建议沿用 `web-app-zh-cn`。源码包包含完成构建所需的输入、锁文件、脚本和文档，不依赖原部署项目的 `tmp/` 或上级目录。
+源码包包含独立构建所需的输入、锁文件、脚本和文档。`npm run package` 生成的安装 ZIP 和源码 ZIP 均不收录 `.agents/`；维护 skill 保留在 Git 仓库中。
 
-1. 首次发行使用当前 `0.1.0`；后续发行时更新 `package.json` 版本及 `CHANGELOG.md`，用 `npm install --package-lock-only` 同步锁文件，并更新安装示例中的版本参数。
+1. 确认 `package.json` 版本及 `CHANGELOG.md`。版本变化时用 `npm install --package-lock-only` 同步锁文件，并更新安装示例中的版本参数。
 2. 运行 `npm ci && npm run package`，从源码包解压后复核能独立构建。
-3. 创建对应版本的 GitHub Release，上传安装 ZIP、源码 ZIP、`SHA256SUMS`。仓库确定后可在 `package.json` 中补上真实 `repository`、`homepage`、`bugs` 地址。
-4. `.github/workflows/ci.yml` 在独立仓库根目录生效，执行构建和打包并保存 artifact；它不会自动向 npm、GitHub Release 或应用商店发布。`private: true` 用于避免误发 npm，不影响 GitHub 开源和发行附件。
-
-旧内部名称的迁移方法见 [docs/migration.md](./docs/migration.md)。
+3. 在[项目 Releases](https://github.com/roojay/web-app-zh-cn/releases) 中创建对应版本，上传安装 ZIP、源码 ZIP、`SHA256SUMS`。
+4. `.github/workflows/ci.yml` 执行构建和打包并保存 artifact；它不会自动向 npm、GitHub Release 或应用商店发布。`private: true` 用于避免误发 npm，不影响 GitHub 开源和发行附件。
 
 ## 许可与来源
 

@@ -1,18 +1,18 @@
 # 构建、发布与运行验证
 
-准备发行、改变译文加载方式或排查“修改后仍显示旧文案”时读取。安装参数以 [README](../../../../README.md) 为准；旧模块迁移与回滚见 [迁移说明](../../../../docs/migration.md)。
+准备发行、改变译文加载方式或排查“修改后仍显示旧文案”时读取。安装参数及升级、回退步骤统一维护在 [README](../../../../README.md)。
 
 ## 构建与发行包
 
 - `npm run build` 已包含类型、键覆盖、占位符及构建产物检查。
 - `npm run package` 已包含完整构建，再生成安装 ZIP、源码 ZIP 和 SHA256SUMS；不必先重复执行 check/build。
-- 常规译文调整不顺带更新 SDK、Vite 或锁文件。准备新版本时按 README 的独立发布步骤更新版本、锁文件、变更记录及安装 URL 的缓存版本参数。
+- 常规译文调整不顺带更新 SDK、Vite 或锁文件。准备新版本时按 README 的发布步骤更新版本、锁文件、变更记录及安装 URL 的缓存版本参数。
 
 核对当前版本对应的包，避免把 `release/` 内其他历史版本误作本轮产物：
 
 1. 安装 ZIP 根目录有 `manifest.json`；其 name/version 与 `package.json` 一致，entrypoint 在包内且路径有效。
 2. 静态 `translations.json` 与 `l10n/translations.json` 字节一致；LICENSE、NOTICE 和第三方许可随安装包分发。
-3. 源码 ZIP 包含独立构建所需的锁文件、脚本和文档，以及本项目的 `.agents/skills/opencloud-zh-cn-maintenance/`。新增维护文件时检查 `scripts/package-release.mjs` 的收录列表。
+3. 源码 ZIP 包含独立构建所需的锁文件、脚本和文档。维护 skill 仅保留在 Git 仓库中，安装 ZIP 和源码 ZIP 均不收录 `.agents/`。修改收录列表时同时检查两个包；README 中的 skill 参考使用 GitHub 链接，避免源码包内出现失效的相对路径。
 4. 源码包不得夹带 `.git`、依赖、发行包、缓存、个人绝对路径或私密环境配置。在 `release/` 目录用 `sha256sum -c SHA256SUMS`（Linux）或 `shasum -a 256 -c SHA256SUMS`（macOS）验证摘要。
 5. 第一次发行，或依赖、构建输入、源码收录列表变化时，把源码 ZIP 解压到新的临时目录，运行 `npm ci` 和 `npm run package`，确认没有父目录或本机隐式依赖。只有文案变化且构建条件未变时可复用此前独立构建结果，并说明范围。
 
@@ -25,7 +25,7 @@ GitHub Actions 当前只构建和保存 artifact，不会自动创建 Release。
 3. **资源内容**：比对部署词表与本地 SHA-256，确认 locale 为 `zh`、目标英文键和值存在。源文件已修改不代表挂载的构建文件已更新。
 4. **缓存**：核对 URL 版本参数、浏览器缓存和反向代理缓存。优先只刷新相关资源，不先清空所有用户状态。
 5. **容器配置**：新增/修改 Compose 挂载或环境变量需重建容器；仅变更原有挂载目录内文件按 README 重启。不要因 restart 成功就认为新挂载已生效。
-6. **应用加载与覆盖顺序**：核对自定义词表、内置应用和外部应用的合并过程，以及是否同时加载旧 `zh-custom-overlay`。不要为掩盖冲突同时保留新旧译文扩展。需要理解机制时查看目标版本实现与 [扩展系统文档](https://docs.opencloud.eu/docs/dev/web/extension-system/)。
+6. **应用加载与覆盖顺序**：核对自定义词表、内置应用和外部应用的合并过程，检查是否重复注册扩展，或在应用发现目录内保留了可被加载的备份副本。需要理解机制时查看目标版本实现与 [扩展系统文档](https://docs.opencloud.eu/docs/dev/web/extension-system/)。
 
 按已发现的原因处理，避免无证据地同时修改语言、挂载、依赖和应用注册。服务器访问、重建或发布须在当前任务已有授权内进行；未获部署授权时可完成本地诊断和可审阅修改。
 

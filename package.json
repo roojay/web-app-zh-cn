@@ -19,6 +19,14 @@
     "vite": "8.0.0"
   },
   "description": "Community Simplified Chinese terminology and translations for OpenCloud Web.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roojay/web-app-zh-cn.git"
+  },
+  "homepage": "https://github.com/roojay/web-app-zh-cn#readme",
+  "bugs": {
+    "url": "https://github.com/roojay/web-app-zh-cn/issues"
+  },
   "license": "AGPL-3.0-only",
   "engines": {
     "node": ">=22.12.0"

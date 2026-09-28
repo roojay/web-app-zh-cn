@@ -15,10 +15,11 @@ const output = join(root, 'release')
 mkdirSync(output, { recursive: true })
 const stage = mkdtempSync(join(tmpdir(), `${pkg.name}-`))
 const checksums = []
+// Maintainer skills stay in Git; release archives contain no .agents resources.
 const sourceFiles = [
   '.editorconfig', '.gitignore', '.nvmrc', '.github', 'LICENSE', 'NOTICE', 'README.md',
   'CHANGELOG.md', 'package.json', 'package-lock.json', 'tsconfig.json', 'vite.config.ts',
-  'src', 'l10n', 'scripts', 'docs', '.agents/skills/opencloud-zh-cn-maintenance'
+  'src', 'l10n', 'scripts'
 ]
 try {
   for (const kind of ['app', 'source']) {
