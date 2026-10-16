@@ -2,10 +2,10 @@
 
 `web-app-zh-cn` 是一个社区维护的 OpenCloud Web 译文扩展，采用 OpenCloud 官方 Extension SDK 和 Web Application 接口。统一“团队空间”“回收站”“分享”等常用网盘术语，补齐并优化中文表达，不增加页面、菜单或业务接口。
 
-- 当前词表：1,640 个英文消息键，语言键为 OpenCloud 使用的 `zh`。
-- 词表基线：OpenCloud 8.0.1 部署中的 Web 与内置应用，来源信息见 [NOTICE](./NOTICE)。
+- 当前词表：1,709 个英文消息键，语言键为 OpenCloud 使用的 `zh`。
+- 词表基线：保留 OpenCloud 8.0.1 部署的现有词条，补齐 Web 8.1.0 相关运行时及内置应用词表中的 69 个新增键；来源和覆盖范围见 [NOTICE](./NOTICE)。
 - 构建基线：Extension SDK / web-pkg 8.0.0，Vite 8；依赖由 `package-lock.json` 固定。
-- 当前模块版本：`0.1.0`，独立于服务端版本。
+- 当前模块版本：`0.1.1`，独立于服务端版本。
 
 服务端、Web 与 SDK 的版本需分别核对。适配其他 Web 版本或应用时，应检查词条覆盖及译文加载顺序。
 
@@ -20,7 +20,7 @@ npm run package
 
 - `check`：TypeScript、英文键覆盖、非空译文及 `%{...}` 占位符检查。
 - `build`：检查后构建，并验证清单入口、静态词表和许可文件。
-- `package`：构建并生成 `release/web-app-zh-cn-0.1.0.zip`、同版本 `-source.zip` 与 `SHA256SUMS`。
+- `package`：构建并生成 `release/web-app-zh-cn-0.1.1.zip`、同版本 `-source.zip` 与 `SHA256SUMS`。
 - `build:watch`：监听源文件重新构建；在 OpenCloud 中刷新页面查看变化。
 
 安装 ZIP 根目录直接包含 `manifest.json`，符合官方应用商店要求；源码 ZIP 内包含完整独立项目。`dist/`、`release/`、依赖和构建缓存均不纳入源码版本管理。
@@ -47,7 +47,7 @@ npm run package
    ```json
    {
      "customTranslations": [
-       { "url": "https://cloud.example.com/assets/apps/web-app-zh-cn/translations.json?v=0.1.0" }
+       { "url": "https://cloud.example.com/assets/apps/web-app-zh-cn/translations.json?v=0.1.1" }
      ]
    }
    ```
@@ -76,6 +76,7 @@ npm run package
 ## 升级与回退
 
 1. 保留当前安装包、Web 配置和 Compose 配置的可恢复副本。副本放在应用发现目录之外，避免重复加载。
+   替换文件时保留原属主、权限和 SELinux 标签；尤其不要让原本由服务账号读取的 `0600` Web 配置变成 root 所有。应用变更前以容器实际运行用户确认配置和扩展文件可读。
 2. 将新安装包解压到空目录后替换扩展目录，更新 `customTranslations` URL 的版本参数，按安装步骤应用文件或容器配置变更。手动注册应用的部署需检查 `external_apps`、`apps.yaml` 或应用配置中的名称和路径；使用自动发现时避免重复注册。
 3. 核对清单、入口资源和词表，并检查受影响页面。需要回退时恢复上一版扩展及对应配置，按安装步骤重新应用并刷新浏览器验证。
 

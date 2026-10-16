@@ -7,6 +7,14 @@ The upstream project is distributed under the GNU Affero General Public License 
 
 This catalog was collected from an OpenCloud 8.0.1 deployment on 2026-09-25,
 then completed and revised for familiar Simplified Chinese file-sharing terminology.
+On 2026-10-16, 69 additional message keys were merged from OpenCloud Web v8.1.0
+(tag commit 24aeb55), using the union of language keys in packages/*/l10n/
+translations.json for web-runtime, web-pkg, web-client, design-system and these
+bundled apps: files, search, text-editor, pdf-viewer, external, admin-settings,
+epub-reader, preview, app-store, rclone-crypt. Existing keys are retained for
+compatibility. This is a catalog-based baseline, not a fresh extraction of all
+translation calls. New Chinese translations were reviewed locally.
+
 It is a community customization and is not an official OpenCloud translation release.
 
 The module is distributed under AGPL-3.0-only; see LICENSE. Third-party libraries
